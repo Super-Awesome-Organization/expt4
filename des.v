@@ -101,6 +101,7 @@ module des_o(desOut, desIn, key, decrypt, roundSel, clk, rst);
 	input		decrypt;
 	input	[3:0]	roundSel;
 	input		clk;
+	input 		rst;
 
 	wire	[1:48]	K_sub;
 	wire	[1:64]	IP, FP;
