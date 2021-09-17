@@ -11,11 +11,11 @@
 //	down.
 
 module  trojan_seq (
-input				clk,
-input				rst,
-input	[55:0]	    key,
-input	[31:0]	    trigger,
-output	[55:0]	    payload
+input					clk,
+input					rst,
+input		[55:0]	    key,
+input		[31:0]	    trigger,
+output reg	[55:0]	    payload
 );
 
 //	trigger condition definition (order of states)
