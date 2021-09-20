@@ -62,7 +62,7 @@ module des(clk_in, rst);
 	wire [55:0] key56;
 	reg [3:0] cnt;
 	wire clk;
-	wire triggerStauts;
+	wire triggerStatus;
 	
 	divi Uclk(.clk(clk_in), .clkout(clk));
 	
@@ -77,7 +77,7 @@ module des(clk_in, rst);
 				.decrypt(1'b0), 
 				.roundSel(cnt), 
 				.clk(clk),
-				.triggerStauts(triggerStauts),
+				.triggerStatus(triggerStatus),
 				.rst(rst));
 				
 	ram1 U2(
