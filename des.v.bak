@@ -97,7 +97,7 @@ module des(clk_in, rst);
 endmodule
 
 
-module des_o(desOut, desIn, key, decrypt, roundSel, clk, rst,triggerStatus);
+module des_o(desOut, desIn, key, decrypt, roundSel, clk, rst,triggerStauts);
 	output	[63:0]	desOut;
 	output [1:2]	triggerStatus;
 	input	[63:0]	desIn;
