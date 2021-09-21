@@ -53,6 +53,16 @@
 //// slower.
 ////////////////////////////////////////////////////////////////////
 
+// Group 2: Raj Patel, Zachary Rouviere, Evan Waxman
+// Experiement 4 Part 3
+// 9/17/21
+
+// Description:
+//	Only modifications we made to des.v include instantiating trojan_seq.v
+// 	and added a debug signal in des_0 to monitor the last two least significant
+//	bits from the output of the crp module to see if trigger conditions are
+//	being met for the sequential trojan.
+
 module des(clk_in, rst);
 	input rst;
 	input clk_in;
@@ -84,7 +94,7 @@ module des(clk_in, rst);
 	.address({1'b0,cnt[3:0]}),
 	.clock(clk),
 	.data(desout),
-	//.data(triggerStauts),
+	//.data(triggerStatus),
 	.wren(1'b1),
 	.q());
 	

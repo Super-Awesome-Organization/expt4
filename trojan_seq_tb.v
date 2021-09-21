@@ -43,35 +43,35 @@ module trojan_seq_tb ();
 		trigger = 32'h55555550;
 		`DELAY(1)
 
-		trigger = 32'h45555555;
+		trigger = 32'h55555552;
 		`DELAY(1)
 
-		trigger = 32'h85555555;
+		trigger = 32'h55555551;
 		`DELAY(1)
 
-		trigger = 32'h05555555;
+		trigger = 32'h55555550;
 		`DELAY(1)
 
 // TRIGGER CONDITION START ---------------------
 
-		trigger = 32'h45555555;
+		trigger = 32'h55555552;
 		`DELAY(1)
 
-		trigger = 32'h85555555;
+		trigger = 32'h55555551;
 		`DELAY(1)
 
-		trigger = 32'hC5555555;
+		trigger = 32'h55555553;
 		`DELAY(1)
 
 // TRIGGER CONDITION END -----------------------
 
-		trigger = 32'hA5555555;
+		trigger = 32'h55555555;
 		`DELAY(1)
 
-		trigger = 32'h65555555;
+		trigger = 32'h55555556;
 		`DELAY(1)
 
-		trigger = 32'h45555555;
+		trigger = 32'h55555552;
 		`DELAY(20)
 
 		$stop;
