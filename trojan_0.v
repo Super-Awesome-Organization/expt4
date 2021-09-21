@@ -2,7 +2,7 @@
 //Experiement 4 Part 2
 //9/17/21
 
-//The trojan.v file to determine if the trigger condition is met
+//The trojan_0.v file to determine if the trigger condition is met
 // it will return the pay load (modified key) or not.
 // The trigger condition can be change by changing the value of the condition register value
 // The tigger is decmial 0
@@ -16,6 +16,6 @@ reg     [3:0]     condition = 4'b0000;
 
 
 
-  assign payload = (trigger[1:4] == condition[3:0]) ? {key[55:1], ~key[0]} : key[55:0]; // LSB is [1:4] when condition and trigger is met the key[0] is inverted.
+  assign payload = (trigger[29:32] == condition[3:0]) ? {key[55:1], ~key[0]} : key[55:0]; // LSB is [32]. when condition and trigger is met the key[0] is inverted.
 
 endmodule
