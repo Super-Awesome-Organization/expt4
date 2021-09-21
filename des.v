@@ -72,7 +72,7 @@ module des(clk_in, rst);
 	wire [55:0] key56;
 	reg [3:0] cnt;
 	wire clk;
-	wire triggerStatus;
+	wire [1:2] triggerStatus;
 	
 	divi Uclk(.clk(clk_in), .clkout(clk));
 	
