@@ -1,3 +1,9 @@
+// Group 2: Raj Patel, Zachary Rouviere, Evan Waxman
+// Experiement 4 Part 3
+// 9/17/21
+
+// Description:
+//	trojan_seq_tb.v is a testbench to test functionality of trojan_seq.v
 `timescale 1ns/1ns
 
 module trojan_seq_tb ();
